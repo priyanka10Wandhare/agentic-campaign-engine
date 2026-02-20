@@ -18,6 +18,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, clas
 Base = declarative_base()
 
 
+def init_db() -> None:
+    """Initialize database tables."""
+
+    import app.models  # noqa: F401
+
+    Base.metadata.create_all(bind=engine)
+
+
 def get_db() -> Generator[Session, None, None]:
     """Provide a transactional scope around a series of operations."""
 

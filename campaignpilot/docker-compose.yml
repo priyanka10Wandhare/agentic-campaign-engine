@@ -13,6 +13,21 @@ services:
       - ./:/app
     depends_on:
       - db
+      - redis
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: campaignpilot-worker
+    command: celery -A app.core.celery_app:celery_app worker --loglevel=INFO
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+      - redis
 
   db:
     image: postgres:16-alpine
@@ -25,6 +40,12 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: campaignpilot-redis
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_data:

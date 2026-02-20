@@ -3,6 +3,7 @@ import structlog
 
 from app.api.router import api_router
 from app.core.config import get_settings
+from app.core.database import init_db
 from app.core.logging import configure_logging
 
 settings = get_settings()
@@ -19,6 +20,7 @@ app.include_router(api_router, prefix=settings.api_prefix)
 
 @app.on_event("startup")
 def on_startup() -> None:
+    init_db()
     logger.info("app.startup", environment=settings.app_env)
 
 

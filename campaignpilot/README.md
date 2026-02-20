@@ -11,6 +11,7 @@ Production-structured FastAPI backend skeleton for campaign automation workflows
 - Pydantic v2 (`pydantic-settings`)
 - Docker + Docker Compose
 - Structlog-based structured logging
+- Celery + Redis for async outreach task processing
 
 ## Project Structure
 
@@ -70,3 +71,12 @@ uvicorn app.main:app --reload
 
 - Business logic, domain models, and migrations are intentionally not implemented yet.
 - `alembic/` and `tests/` are prepared for future expansion.
+
+## Async Outreach Endpoint
+
+`POST /api/v1/campaigns/{id}/send-outreach`
+
+- Requires `Idempotency-Key` header.
+- Queues outreach send task in Celery.
+- Simulates random transient failures with retry/backoff.
+- Marks campaign as failed and writes audit log after max retries.
