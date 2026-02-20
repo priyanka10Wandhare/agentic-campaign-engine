@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     postgres_port: int = Field(default=5432, alias="POSTGRES_PORT")
 
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
+    openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
+    openai_model: str = Field(default="gpt-4o-mini", alias="OPENAI_MODEL")
+    required_cta_phrase: str = Field(default="Reply with your availability to get started.", alias="REQUIRED_CTA_PHRASE")
 
     @property
     def database_url(self) -> str:
