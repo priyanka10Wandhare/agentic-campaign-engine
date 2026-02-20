@@ -70,3 +70,32 @@ uvicorn app.main:app --reload
 
 - Business logic, domain models, and migrations are intentionally not implemented yet.
 - `alembic/` and `tests/` are prepared for future expansion.
+
+## Outreach Generation Endpoint
+
+`POST /api/v1/campaigns/{id}/generate-outreach`
+
+Request body:
+
+```json
+{
+  "campaign_brief": "Short campaign context",
+  "creator_profile": "Creator audience and style"
+}
+```
+
+Response body:
+
+```json
+{
+  "subject": "...",
+  "body": "...",
+  "confidence_score": 0.72
+}
+```
+
+Behavior:
+- Uses OpenAI when `OPENAI_API_KEY` is configured.
+- Falls back to a deterministic mock response when no API key exists.
+- Applies guardrails (`<=300` words, required CTA phrase).
+- Logs prompt, response, latency, and token usage in `outreach_generation_logs`.

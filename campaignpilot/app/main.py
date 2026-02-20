@@ -3,6 +3,7 @@ import structlog
 
 from app.api.router import api_router
 from app.core.config import get_settings
+from app.core.database import Base, engine
 from app.core.logging import configure_logging
 
 settings = get_settings()
@@ -19,6 +20,9 @@ app.include_router(api_router, prefix=settings.api_prefix)
 
 @app.on_event("startup")
 def on_startup() -> None:
+    from app import models  # noqa: F401
+
+    Base.metadata.create_all(bind=engine)
     logger.info("app.startup", environment=settings.app_env)
 
 
