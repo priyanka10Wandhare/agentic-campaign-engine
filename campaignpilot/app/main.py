@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import structlog
 
+from app.api.middleware import tenant_context_middleware
 from app.api.router import api_router
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -14,6 +15,7 @@ app = FastAPI(
     debug=settings.app_debug,
 )
 
+app.middleware("http")(tenant_context_middleware)
 app.include_router(api_router, prefix=settings.api_prefix)
 
 
