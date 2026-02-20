@@ -1,16 +1,14 @@
 # campaignpilot-ai
 
-Production-structured FastAPI backend skeleton for campaign automation workflows.
+A FastAPI service skeleton for campaign automation workflows with explicit dependency injection, structured logging, and consistent error handling.
 
-## Stack
+## What Changed
 
-- Python 3.11+
-- FastAPI
-- SQLAlchemy 2.x
-- PostgreSQL
-- Pydantic v2 (`pydantic-settings`)
-- Docker + Docker Compose
-- Structlog-based structured logging
+- **Dependency injection** via an `AppContainer` stored on `app.state` and accessed through FastAPI dependencies.
+- **Improved logging** with structured JSON logs and request-level context (`request_id`, `path`, `method`).
+- **Improved error handling** with custom application exceptions and centralized exception handlers.
+- **Better folder separation** by splitting app bootstrap, dependency providers, routes, and error modules.
+- **Basic unit tests** for health route, error contract, and settings behavior.
 
 ## Project Structure
 
@@ -18,55 +16,68 @@ Production-structured FastAPI backend skeleton for campaign automation workflows
 campaignpilot/
 ├── app/
 │   ├── api/
+│   │   ├── routes/
+│   │   │   ├── health.py
+│   │   │   └── system.py
+│   │   └── router.py
+│   ├── bootstrap/
+│   │   └── middleware.py
 │   ├── core/
-│   ├── models/
-│   ├── schemas/
-│   ├── services/
-│   ├── workflow/
-│   ├── agents/
-│   ├── evaluation/
+│   │   ├── config.py
+│   │   ├── container.py
+│   │   ├── database.py
+│   │   └── logging.py
+│   ├── dependencies/
+│   │   └── providers.py
+│   ├── errors/
+│   │   ├── exceptions.py
+│   │   └── handlers.py
+│   ├── application.py
 │   └── main.py
-├── alembic/
 ├── tests/
+│   └── unit/
 ├── Dockerfile
 ├── docker-compose.yml
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
 
-## Configuration
+## Setup Instructions
 
-1. Copy environment template:
+### 1. Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-2. Update values as needed.
+Edit `.env` values as needed.
 
-`app/core/config.py` reads settings from `.env` and environment variables.
-
-## Run with Docker
-
-```bash
-docker compose up --build
-```
-
-API docs available at:
-
-- http://localhost:8000/docs
-- http://localhost:8000/redoc
-
-## Local Run
+### 2. Local setup
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload
 ```
 
-## Notes
+### 3. Run the app
 
-- Business logic, domain models, and migrations are intentionally not implemented yet.
-- `alembic/` and `tests/` are prepared for future expansion.
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+API docs:
+
+- http://localhost:8000/docs
+- http://localhost:8000/redoc
+
+### 4. Run tests
+
+```bash
+pytest
+```
+
+## Docker
+
+```bash
+docker compose up --build
+```
