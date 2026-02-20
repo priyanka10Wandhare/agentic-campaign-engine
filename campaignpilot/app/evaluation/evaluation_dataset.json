@@ -1,0 +1,14 @@
+[
+  {
+    "campaign_id": "spring_sale",
+    "content": "Headline: Spring Savings Event\nBody: Refresh your wardrobe with up to 40% off selected items this week only.\nCTA: Shop the sale now"
+  },
+  {
+    "campaign_id": "spring_sale",
+    "content": "Headline: Weekend Flash Deal\nBody: Save on top picks before Sunday midnight. Limited stock available.\nCTA: Claim your discount"
+  },
+  {
+    "campaign_id": "onboarding",
+    "content": "Headline: Welcome to CampaignPilot\nBody: Get started by creating your first automated campaign in under five minutes.\nCTA: Launch your first campaign"
+  }
+]
