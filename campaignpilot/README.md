@@ -70,3 +70,10 @@ uvicorn app.main:app --reload
 
 - Business logic, domain models, and migrations are intentionally not implemented yet.
 - `alembic/` and `tests/` are prepared for future expansion.
+
+
+## Creator Matching
+
+- `POST /api/v1/campaigns/{id}/match-creators` embeds the campaign brief and returns top 5 similar creators.
+- If `OPENAI_API_KEY` is not set, the API uses a deterministic mock embedding generator for local development.
+- Startup initialization enables the `pgvector` extension and creates the `match_creators` similarity SQL function.

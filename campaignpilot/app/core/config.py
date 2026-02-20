@@ -24,6 +24,9 @@ class Settings(BaseSettings):
 
     log_level: str = Field(default="INFO", alias="LOG_LEVEL")
 
+    openai_api_key: str | None = Field(default=None, alias="OPENAI_API_KEY")
+    openai_embedding_model: str = Field(default="text-embedding-3-small", alias="OPENAI_EMBEDDING_MODEL")
+
     @property
     def database_url(self) -> str:
         return (
