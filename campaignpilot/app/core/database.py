@@ -1,33 +1,27 @@
 from collections.abc import Generator
 
-from sqlalchemy import Engine, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
-from app.core.config import Settings
+from app.core.config import get_settings
+
+settings = get_settings()
+
+engine = create_engine(
+    settings.database_url,
+    pool_pre_ping=True,
+    future=True,
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=Session)
 
 Base = declarative_base()
 
 
-def create_db_engine(settings: Settings) -> Engine:
-    """Create the SQLAlchemy engine from application settings."""
-
-    return create_engine(
-        settings.database_url,
-        pool_pre_ping=True,
-        future=True,
-    )
-
-
-def create_session_factory(engine: Engine) -> sessionmaker[Session]:
-    """Create the SQLAlchemy session factory."""
-
-    return sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=Session)
-
-
-def get_db_session(session_factory: sessionmaker[Session]) -> Generator[Session, None, None]:
+def get_db() -> Generator[Session, None, None]:
     """Provide a transactional scope around a series of operations."""
 
-    db = session_factory()
+    db = SessionLocal()
     try:
         yield db
     finally:
